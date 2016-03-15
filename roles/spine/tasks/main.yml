@@ -13,18 +13,6 @@
 - name: Force an interfaces file reload if the ports.conf has changed
   meta: flush_handlers
 
-- name: Configure vxsnd config
-  template: src=vxsnd.j2 dest=/etc/vxsnd.conf
-  notify: restart vxsnd
-  tags:
-    - vxsnd
-
-- name: Configure vxsnd
-  copy: src=vxsnd dest=/etc/default/vxsnd
-  notify: restart vxsnd
-  tags:
-    - vxsnd
-
 - name: Configure quagga daemons file
   copy: src=daemons dest=/etc/quagga/daemons backup=yes
   notify: restart quagga
