@@ -5,8 +5,8 @@ function error() {
 }
 trap error ERR
 
-SSH_URL="http://192.168.252.254/authorized_keys"
-LIC_URL="http://192.168.252.254/license.txt"
+SSH_URL="http://10.6.127.158/authorized_keys"
+LIC_URL="http://10.6.127.158/license.txt"
 
 #Install license
 wget -q -O /root/license.txt $LIC_URL
