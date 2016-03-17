@@ -1,7 +1,7 @@
 {% set node = interfaces[ansible_hostname] %}
 {% set bgpvars = bgp[ansible_hostname] -%}
 {% set bridgevars = bridges[ansible_hostname] -%}
-
+{% set SVIs = svis[ansible_hostname] -%}
 
 #Configured by Ansible
 
@@ -68,17 +68,6 @@ iface peerlink.{{vlan}}
 {% endif %}
 {% endfor -%}
 
-auto bond1.20
-iface bond1.20
-  mtu 9000
-
-auto bond1.30
-iface bond1.30
-  mtu 9000
-auto bond1.40
-iface bond1.40
-  mtu 9000
-
 {% if bgpvars.internal_fabric.interfaces is defined -%}
 #### Fabric ports ####
 {% for interface in bgpvars.internal_fabric.interfaces -%}
@@ -88,12 +77,21 @@ iface {{interface}}
 {% endfor %}
 {% endif -%}
 
-{% for bridge in bridgevars -%}
-auto {{bridgevars[bridge].name}}
-iface {{bridgevars[bridge].name}}
-  bridge-ports {{bridgevars[bridge].members|join(' ')}}
-{% if bridgevars[bridge].svi is defined -%}
-  address {{bridgevars[bridge].svi.ip}}
-  address-virtual {{bridgevars[bridge].svi.mac}} {{bridgevars[bridge].svi.virtual}} 
+{% for bridge in bridgevars.keys() -%}
+auto {{bridge.name}}
+iface {{bridge.name}}
+  bridge-ports {{bridge.members|join(' ')}}
+  bridge-stp on
+{% if {bridge.vlanaware} is defined %}
+  bridge-vlan-aware yes
+  bridge-vids {{bridge.vids|join(' ')}}
+  bridge-pvid 1
+{% endif %}
+
+{% for svi in SVIs.keys() }
+auto {{svi.name}}
+iface {{svi.name}}
+  address {{svi.ip}}
+  address-virtual {{svi.mac}} {{svi.virtual}} 
 {% endif %}  
 {% endfor %}
