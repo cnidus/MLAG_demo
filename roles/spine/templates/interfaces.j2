@@ -1,15 +1,18 @@
 {% set node = interfaces[ansible_hostname] %}
 {% set bgpvars = bgp[ansible_hostname] -%}
+{% set bridgevars = bridges[ansible_hostname] -%}
+{% set SVIs = svis[ansible_hostname] -%}
 
 #Configured by Ansible
 
-{% for interface in node.keys() -%}
+auto eth0
+iface eth0 inet dhcp
+
+{% for interface in  node.keys() -%}
 auto {{interface}}
 {% if interface == "lo" -%}
 iface lo inet loopback
-{% if node[interface].lnv_ip is defined %}
-  address {{node[interface].lnv_ip}}
-{% endif %}
+clagd-vxlan-anycast-ip {{node[interface].clag_anycast}}
 {% else %}
 iface {{interface}}
 {% endif -%}
@@ -18,7 +21,13 @@ iface {{interface}}
 {% endif -%}
 {% if node[interface].ipv6 is defined %}
   address {{node[interface].ipv6}}
-{% endif -%}
+{% endif %}
+{% if node[interface].alias is defined %}
+  alias {{ node[interface].alias }}
+{% endif %}
+{% if node[interface].mtu is defined %}
+  mtu {{ node[interface].mtu }}
+{% endif %}
 {% if interface.startswith('bond') -%}
   bond-slaves {{node[interface].slaves|join(' ')}}
   bond-mode 802.3ad
@@ -27,23 +36,37 @@ iface {{interface}}
   bond-lacp-rate 1
   bond-min-links 1
   bond-xmit-hash-policy layer3+4
-{% else -%}
-{% if interface.startswith('eth0') %}
-  gateway {{node[interface].gw}}
+  clag-id {{node[interface].clagid}}
 {% endif -%}
-{% if node[interface].alias is defined %}
-  alias {{ node[interface].alias }}
-{% endif %}
-{% if node[interface].mtu is defined %}
-  mtu {{ node[interface].mtu }}
-{% endif %}
-{% endif %}
+{% if interface.startswith('vni') -%}
+  vxlan-id {{node[interface].vni}}
+  vxlan-local-tunnelip {{node[interface].tun_ip}}
+{% endif -%}
+{% if interface.startswith('peerlink') %}
+  bond-slaves {{node[interface].slaves|join(' ')}}
+  bond-mode 802.3ad
+  bond-miimon 100
+  bond-use-carrier 1
+  bond-lacp-rate 1
+  bond-min-links 1
+  bond-xmit-hash-policy layer3+4
+
+auto peerlink.4094
+iface peerlink.4094
+    address {{node[interface].ip}}
+    netmask 255.255.255.0     
+    clagd-priority 4096
+    clagd-peer-ip {{node[interface].peerip}}
+    clagd-backup-ip {{node[interface].backupip}}
+    clagd-sys-mac {{node[interface].mac}}
+
+{% for vlan in node[interface].vlans %}
+auto peerlink.{{vlan}}
+iface peerlink.{{vlan}}
+
 {% endfor %}
-
-#If iterfaces need to be in bonds add the following:
-#    #required for traffic to flow on Bonds in Vbox VMs
-#    post-up ip link set $IFACE promisc on
-
+{% endif %}
+{% endfor -%}
 
 {% if bgpvars.internal_fabric.interfaces is defined -%}
 #### Fabric ports ####
@@ -53,3 +76,24 @@ iface {{interface}}
   mtu 9216
 {% endfor %}
 {% endif -%}
+
+{% for bridge in bridgevars.keys() -%}
+auto {{bridge.name}}
+iface {{bridge.name}}
+  bridge-ports {{bridge.members|join(' ')}}
+  bridge-stp on
+{% if {bridge.vlanaware} is defined %}
+  bridge-vlan-aware yes
+  bridge-vids {{bridge.vids|join(' ')}}
+  bridge-pvid 1
+{% endif %}
+{% endfor %}
+
+{% for svi in SVIs.keys() }
+auto {{svi.name}}
+iface {{svi.name}}
+  address {{svi.ip}}
+{% if svi.virtual is defined %}
+  address-virtual {{svi.mac}} {{svi.virtual}} 
+{% endif %}  
+{% endfor %}

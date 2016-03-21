@@ -1,33 +1,125 @@
 interfaces:
-  s6k1:
-    lo:
+  spine1:
+    - lo:
       ipv6: "fd::1/128"
-      ipv4: "10.254.0.1/32"
-    eth0:
-      ipv4: "10.11.26.41/24"
-      gw: "10.11.26.254"
+    - swp1:
+      mtu: "9216"
+    - swp2:
+      mtu: "9216"
+    - swp3:
+      mtu: "9216"
+    - swp4:
+      mtu: "9216"
+    - swp29:
+      mtu: "9216"
+      address: "10.6.125.66/30"
+    - swp30:
+      mtu: "9216"
+      address: "10.6.125.74/30"
+    - swp31:
+      mtu: "9216"
+    - swp32:
+      mtu: "9216"
+    - bond100:
+      slaves: ["swp1","swp2","swp3","swp4"]
+      clagid: "100"
+      mtu: "9216"
+    - peerlink:
+      slaves: ["swp31","swp32"]
+      ip: "169.254.255.1/24"
+      peerip: "169.254.255.2"
+      backupip: "10.6.127.152"
+      mac: "44:38:39:ff:00:03"
+      mtu: "9216"
 
-  s6k2:
-    lo:
+  spine2:
+    - lo:
       ipv6: "fd::2/128"
-      ipv4: "10.254.0.2/32"
-    eth0:
-      ipv4: "10.11.26.42/24"
-      gw: "10.11.26.254"
+    - swp1:
+      mtu: "9216"
+    - swp2:
+      mtu: "9216"
+    - swp3:
+      mtu: "9216"
+    - swp4:
+      mtu: "9216"
+    - swp29:
+      mtu: "9216"
+      address: "10.6.125.70/30"
+    - swp30:
+      mtu: "9216"
+      address: "10.6.125.78/30"
+    - swp31:
+      mtu: "9216"
+    - swp32:
+      mtu: "9216"
+    - bond100:
+      slaves: ["swp1","swp2","swp3","swp4"]
+      clagid: "100"
+      mtu: "9216"
+    - peerlink:
+      slaves: ["swp31","swp32"]
+      ip: "169.254.255.2/24"
+      peerip: "169.254.255.1"
+      backupip: "10.6.127.151"
+      mac: "44:38:39:ff:00:03"
+      mtu: "9216"
 
 bgp:
-  s6k1:
-    myasn: "64512"
+  spine1:
+    myasn: "64710"
     #Internal Fabric ports to run BGP unnumbered on
-    ipv4_networks: ["10.254.0.99/32","10.254.0.1/32"]
-    internal_fabric:
-      interfaces: ["swp3","swp4","swp5","swp6"]
-      description: "Internal Fabric Network"
+    ipv4_networks: ["10.6.120.0/24"]
+    neighbors:
+      9k1:
+        name: "9k-1"
+        remote_ip: "10.6.120.65"
+        remote_as: "64700"
+      9k2:
+        name: "9k-2"
+        remote_ip: "10.6.120.73"
+        remote_as: "64700"
   
-  s6k2:
-    myasn: "64513"
+  spine2:
+    myasn: "64710"
     #Internal Fabric ports to run BGP unnumbered on
-    ipv4_networks: ["10.254.0.99/32","10.254.0.2/32"]
-    internal_fabric:
-      interfaces: ["swp3","swp4","swp5","swp6"]
-      description: "Internal Fabric Network"
+    ipv4_networks: ["10.6.120.0/24"]
+    neighbors:
+      9k1:
+        name: "9k-1"
+        remote_ip: "10.6.120.69"
+        remote_as: "64700"
+      9k2:
+        name: "9k-2"
+        remote_ip: "10.6.120.77"
+        remote_as: "64700"
+
+bridges:
+  spine1:
+    bridge:
+      name: "bridge"
+      members: ["bond100","peerlink"]
+      vlanaware: "yes"
+      vids: ["1-100"]
+
+  spine2:
+    bridge:
+      name: "bridge"
+      members: ["bond100","peerlink"]
+      vlanaware: "yes"
+      vids: ["1-100"]
+
+SVIs:
+  spine1:
+    v10:
+      name: "bridge.10"
+      ip: "10.6.120.2/24"
+      mac: "00:00:5e:00:01:01"
+      virtual: "10.6.120.1"
+
+  spine2:
+    v10:
+      name: "bridge.10"
+      ip: "10.6.120.3/24"
+      mac: "00:00:5e:00:01:01"
+      virtual: "10.6.120.1"
