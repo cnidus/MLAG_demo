@@ -8,11 +8,10 @@
 auto eth0
 iface eth0 inet dhcp
 
-{% for interface in  node.keys() -%}
+{% for interface in node.keys() -%}
 auto {{interface}}
 {% if interface == "lo" -%}
 iface lo inet loopback
-clagd-vxlan-anycast-ip {{node[interface].clag_anycast}}
 {% else %}
 iface {{interface}}
 {% endif -%}

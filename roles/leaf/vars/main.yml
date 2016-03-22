@@ -1,195 +1,195 @@
 interfaces:
 
   leaf1:
-    - lo:
+    lo:
       ipv6: "fd::1:1/128"
       ipv4: "10.254.1.1/32"
-    - bond1:
+    bond1:
       slaves: ["swp1"]
       clagid: "1"
       mtu: "9216"
-    - bond2:
+    bond2:
       slaves: ["swp2"]
       clagid: "2"
       mtu: "9216"
-    - bond3:
+    bond3:
       slaves: ["swp3"]
       clagid: "3"
       mtu: "9216"
-    - bond4:
+    bond4:
       slaves: ["swp4"]
       clagid: "4"
       mtu: "9216"
-    - bond100:
+    bond100:
       slaves: ["swp49","swp50"]
       clagid: "100"
       mtu: "9216"
-    - peerlink:
+    peerlink:
       slaves: ["swp51","swp52"]
       ip: "169.254.255.1/24"
       peerip: "169.254.255.2"
       backupip: "10.6.127.154"
       mac: "44:38:39:ff:00:01"
       mtu: "9216"
-    - swp1:
+    swp1:
       mtu: "9216"
-    - swp2:
+    swp2:
       mtu: "9216"
-    - swp3:
+    swp3:
       mtu: "9216"
-    - swp4:
+    swp4:
       mtu: "9216"
-    - swp49:
+    swp49:
       mtu: "9216"
-    - swp50:
+    swp50:
       mtu: "9216"
-    - swp51:
+    swp51:
       mtu: "9216"
-    - swp52:
+    swp52:
       mtu: "9216"
 
   leaf2:
-    - lo:
+    lo:
       ipv6: "fd::1:2/128"
       ipv4: "10.254.1.2/32"
-    - bond1:
+    bond1:
       slaves: ["swp1"]
       clagid: "1"
       mtu: "9216"
-    - bond2:
+    bond2:
       slaves: ["swp2"]
       clagid: "2"
       mtu: "9216"
-    - bond3:
+    bond3:
       slaves: ["swp3"]
       clagid: "3"
       mtu: "9216"
-    - bond4:
+    bond4:
       slaves: ["swp4"]
       clagid: "4"
       mtu: "9216"
-    - bond100:
+    bond100:
       slaves: ["swp49","swp50"]
       clagid: "100"
       mtu: "9216"
-    - peerlink:
+    peerlink:
       slaves: ["swp51","swp52"]
       ip: "169.254.255.2/24"
       peerip: "169.254.255.1"
       backupip: "10.6.127.153"
       mac: "44:38:39:ff:00:01"
       mtu: "9216"
-    - swp1:
+    swp1:
       mtu: "9216"
-    - swp2:
+    swp2:
       mtu: "9216"
-    - swp3:
+    swp3:
       mtu: "9216"
-    - swp4:
+    swp4:
       mtu: "9216"
-    - swp49:
+    swp49:
       mtu: "9216"
-    - swp50:
+    swp50:
       mtu: "9216"
-    - swp51:
+    swp51:
       mtu: "9216"
-    - swp52:
+    swp52:
       mtu: "9216"
 
   leaf3:
-    - lo:
+    lo:
       ipv6: "fd::1:3/128"
       ipv4: "10.254.1.3/32"
-    - bond1:
+    bond1:
       slaves: ["swp1"]
       clagid: "1"
       mtu: "9216"
-    - bond2:
+    bond2:
       slaves: ["swp2"]
       clagid: "2"
       mtu: "9216"
-    - bond3:
+    bond3:
       slaves: ["swp3"]
       clagid: "3"
       mtu: "9216"
-    - bond4:
+    bond4:
       slaves: ["swp4"]
       clagid: "4"
       mtu: "9216"
-    - bond100:
+    bond100:
       slaves: ["swp49","swp50"]
       clagid: "100"
       mtu: "9216"
-    - peerlink:
+    peerlink:
       slaves: ["swp51","swp52"]
       ip: "169.254.255.1/24"
       peerip: "169.254.255.2"
       backupip: "10.6.127.156"
       mac: "44:38:39:ff:00:02"
       mtu: "9216"
-    - swp1:
+    swp1:
       mtu: "9216"
-    - swp2:
+    swp2:
       mtu: "9216"
-    - swp3:
+    swp3:
       mtu: "9216"
-    - swp4:
+    swp4:
       mtu: "9216"
-    - swp49:
+    swp49:
       mtu: "9216"
-    - swp50:
+    swp50:
       mtu: "9216"
-    - swp51:
+    swp51:
       mtu: "9216"
-    - swp52:
+    swp52:
       mtu: "9216"
 
   leaf4:
-    - lo:
+    lo:
       ipv6: "fd::1:4/128"
       ipv4: "10.254.1.4/32"
-    - bond1:
+    bond1:
       slaves: ["swp1"]
       clagid: "1"
       mtu: "9216"
-    - bond2:
+    bond2:
       slaves: ["swp2"]
       clagid: "2"
       mtu: "9216"
-    - bond3:
+    bond3:
       slaves: ["swp3"]
       clagid: "3"
       mtu: "9216"
-    - bond4:
+    bond4:
       slaves: ["swp4"]
       clagid: "4"
       mtu: "9216"
-    - bond100:
+    bond100:
       slaves: ["swp49","swp50"]
       clagid: "100"
       mtu: "9216"
-    - peerlink:
+    peerlink:
       slaves: ["swp51","swp52"]
       ip: "169.254.255.2/24"
       peerip: "169.254.255.1"
       backupip: "10.6.127.155"
       mac: "44:38:39:ff:00:02"
       mtu: "9216"
-    - swp1:
+    swp1:
       mtu: "9216"
-    - swp2:
+    swp2:
       mtu: "9216"
-    - swp3:
+    swp3:
       mtu: "9216"
-    - swp4:
+    swp4:
       mtu: "9216"
-    - swp49:
+    swp49:
       mtu: "9216"
-    - swp50:
+    swp50:
       mtu: "9216"
-    - swp51:
+    swp51:
       mtu: "9216"
-    - swp52:
+    swp52:
       mtu: "9216"
 
 bridges:
