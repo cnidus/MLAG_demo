@@ -59,18 +59,8 @@ iface peerlink.4094
     clagd-backup-ip {{node[interface].backupip}}
     clagd-sys-mac {{node[interface].mac}}
 
-{% endfor %}
 {% endif %}
 {% endfor -%}
-
-{% if bgpvars.internal_fabric.interfaces is defined -%}
-#### Fabric ports ####
-{% for interface in bgpvars.internal_fabric.interfaces -%}
-auto {{interface}}
-iface {{interface}}
-  mtu 9216
-{% endfor %}
-{% endif -%}
 
 {% for bridge in bridgevars.keys() -%}
 auto {{bridge.name}}
