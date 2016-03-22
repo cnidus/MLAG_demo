@@ -1,7 +1,7 @@
 {% set node = interfaces[ansible_hostname] %}
 {% set bgpvars = bgp[ansible_hostname] -%}
 {% set bridgevars = bridges[ansible_hostname] -%}
-{% set SVIs = svis[ansible_hostname] -%}
+{% set SVIs = SVIs[ansible_hostname] -%}
 
 #Configured by Ansible
 
@@ -59,10 +59,6 @@ iface peerlink.4094
     clagd-backup-ip {{node[interface].backupip}}
     clagd-sys-mac {{node[interface].mac}}
 
-{% for vlan in node[interface].vlans %}
-auto peerlink.{{vlan}}
-iface peerlink.{{vlan}}
-
 {% endfor %}
 {% endif %}
 {% endfor -%}
@@ -81,14 +77,14 @@ auto {{bridge.name}}
 iface {{bridge.name}}
   bridge-ports {{bridge.members|join(' ')}}
   bridge-stp on
-{% if {bridge.vlanaware} is defined %}
+{% if bridge.vlanaware is defined %}
   bridge-vlan-aware yes
   bridge-vids {{bridge.vids|join(' ')}}
   bridge-pvid 1
 {% endif %}
 {% endfor %}
 
-{% for svi in SVIs.keys() }
+{% for svi in SVIs.keys() %}
 auto {{svi.name}}
 iface {{svi.name}}
   address {{svi.ip}}
