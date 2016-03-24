@@ -1,5 +1,4 @@
 {% set node = interfaces[ansible_hostname] %}
-{% set bgpvars = bgp[ansible_hostname] -%}
 {% set bridgevars = bridges[ansible_hostname] -%}
 {% set SVIs = SVIs[ansible_hostname] -%}
 
@@ -63,11 +62,11 @@ iface peerlink.4094
 {% endfor -%}
 
 {% for bridge in bridgevars.keys() -%}
-auto {{bridge.name}}
-iface {{bridge.name}}
-  bridge-port {{bridgevars[bridge].members|join(' ')}}
+auto {{bridgevars[bridge].name}}
+iface {{bridgevars[bridge].name}}
+  bridge-ports {{bridgevars[bridge].members|join(' ')}}
   bridge-stp on
-{% if bridge.vlanaware is defined %}
+{% if bridgevars[bridge].vlanaware is defined %}
   bridge-vlan-aware yes
   bridge-vids {{bridgevars[bridge].vids|join(' ')}}
   bridge-pvid 1
@@ -75,10 +74,10 @@ iface {{bridge.name}}
 {% endfor %}
 
 {% for svi in SVIs.keys() %}
-auto {{svi.name}}
-iface {{svi.name}}
-  address {{svi.ip}}
-{% if svi.virtual is defined %}
-  address-virtual {{svi.mac}} {{svi.virtual}} 
+auto {{SVIs[svi].name}}
+iface {{SVIs[svi].name}}
+  address {{SVIs[svi].ip}}
+{% if SVIs[svi].virtual is defined %}
+  address-virtual {{SVIs[svi].mac}} {{SVIs[svi].virtual}} 
 {% endif %}  
 {% endfor %}

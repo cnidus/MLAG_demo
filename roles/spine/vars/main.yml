@@ -6,22 +6,22 @@ interfaces:
       mtu: "9216"
     swp2:
       mtu: "9216"
-    swp3:
+    swp27:
       mtu: "9216"
-    swp4:
+    swp28:
       mtu: "9216"
     swp29:
       mtu: "9216"
-      address: "10.6.125.66/30"
+      ipv4: "10.6.125.66/30"
     swp30:
       mtu: "9216"
-      address: "10.6.125.74/30"
+      ipv4: "10.6.125.74/30"
     swp31:
       mtu: "9216"
     swp32:
       mtu: "9216"
     bond100:
-      slaves: ["swp1","swp2","swp3","swp4"]
+      slaves: ["swp1","swp2","swp27","swp28"]
       clagid: "100"
       mtu: "9216"
     peerlink:
@@ -39,22 +39,22 @@ interfaces:
       mtu: "9216"
     swp2:
       mtu: "9216"
-    swp3:
+    swp27:
       mtu: "9216"
-    swp4:
+    swp28:
       mtu: "9216"
     swp29:
       mtu: "9216"
-      address: "10.6.125.70/30"
+      ipv4: "10.6.125.70/30"
     swp30:
       mtu: "9216"
-      address: "10.6.125.78/30"
+      ipv4: "10.6.125.78/30"
     swp31:
       mtu: "9216"
     swp32:
       mtu: "9216"
     bond100:
-      slaves: ["swp1","swp2","swp3","swp4"]
+      slaves: ["swp1","swp2","swp27","swp28"]
       clagid: "100"
       mtu: "9216"
     peerlink:

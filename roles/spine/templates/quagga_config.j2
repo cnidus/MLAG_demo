@@ -1,5 +1,6 @@
 {% set bgpvars = bgp[ansible_hostname] -%}
 {% set loopback_ip = interfaces[ansible_hostname].lo.ipv4 -%}
+{% set neighbors = bgpvars.neighbors -%}
 
 {### Set the logging and save all the config in Quagga.conf file ###}
 log file /var/log/quagga/quagga.log
@@ -30,12 +31,10 @@ router bgp {{ bgpvars.myasn }}
   neighbor uplink activate
 
 {### Define neighbors ###}
-{% if bgpvars.neighbors is defined %}
-{% for neighbor in bgpvars.neighbors.keys() -%}
-  neighbor {{neighbor.remote_ip}} peer-group uplink
-  neighbor {{neighbor.remote_ip}} remote-as {{neighbor.remote_as}}
-{% if neighbor.password is defined %}
-  neighbor {{neighbor.remote_ip}} password {{neighbor.password}}
+{% for neighbor in neighbors -%}
+  neighbor {{neighbors[neighbor].remote_ip}} peer-group uplink
+  neighbor {{neighbors[neighbor].remote_ip}} remote-as {{neighbors[neighbor].remote_as}}
+{% if neighbors[neighbor].password is defined %}
+  neighbor {{neighbors[neighbor].remote_ip}} password {{neighbors[neighbor].password}}
 {% endif %}
 {% endfor %}
-{% endif %}
